@@ -1,15 +1,13 @@
-# app/main.py
 from fastapi import FastAPI
-
-from app.routers import task, user
-from . import models, database
-
-
-# Создание таблиц
-models.Base.metadata.create_all(bind=database.engine)
+from .routers import users, tasks
+from .database import engine, Base
 
 app = FastAPI()
 
-# Подключение роутеров
-app.include_router(user.router)  # Правильный путь
-app.include_router(task.router)  # Правильный путь
+app.include_router(users.router)
+app.include_router(tasks.router)
+
+@app.on_event("startup")
+async def startup():
+    async with engine.begin() as conn:
+        await conn.run_sync(Base.metadata.create_all)
