@@ -1,0 +1,31 @@
+version: '3.8'
+
+services:
+  db_test:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: test_task_manager
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres_test_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d test_task_manager"]
+      interval: 5s
+      retries: 5
+
+  test_app:
+    build: .
+    command: pytest --disable-warnings --maxfail=1
+    depends_on:
+      db_test:
+        condition: service_healthy
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://user:password@db_test/test_task_manager
+    volumes:
+      - .:/app
+
+volumes:
+  postgres_test_data:
