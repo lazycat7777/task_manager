@@ -5,7 +5,7 @@ from app import schemas, crud
 
 router = APIRouter(prefix="/users", tags=["users"])
 
-@router.post("/", response_model=schemas.User)
+@router.post("/", response_model=schemas.User, status_code=201)
 async def create_user(user: schemas.UserCreate, db: AsyncSession = Depends(get_db)):
     """
     Создание нового пользователя в системе.
@@ -20,7 +20,7 @@ async def create_user(user: schemas.UserCreate, db: AsyncSession = Depends(get_d
         raise HTTPException(status_code=400, detail="Username already registered")
     
     created_user = await crud.create_user(db=db, user=user)
-    return created_user, 201
+    return created_user
 
 @router.get("/{user_id}", response_model=schemas.User)
 async def read_user(user_id: int, db: AsyncSession = Depends(get_db)):
