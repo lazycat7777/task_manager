@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from datetime import date
 from typing import Optional
 
+
 class UserBase(BaseModel):
     """
     Базовая схема для пользователя, включающая имя пользователя и email.
@@ -9,11 +10,13 @@ class UserBase(BaseModel):
     username: str
     email: str
 
+
 class UserCreate(UserBase):
     """
     Схема для создания нового пользователя.
     """
     pass
+
 
 class User(UserBase):
     """
@@ -25,7 +28,8 @@ class User(UserBase):
         """
         Настройки для Pydantic, чтобы использовать ORM модели (SQLAlchemy).
         """
-        from_attributes = True  
+        from_attributes = True
+
 
 class TaskBase(BaseModel):
     """
@@ -36,11 +40,13 @@ class TaskBase(BaseModel):
     due_date: date
     user_id: int
 
+
 class TaskCreate(TaskBase):
     """
     Схема для создания новой задачи.
     """
     pass
+
 
 class TaskUpdate(BaseModel):
     """
@@ -50,6 +56,7 @@ class TaskUpdate(BaseModel):
     title: Optional[str] = None
     description: Optional[str] = None
     due_date: Optional[date] = None
+
 
 class Task(TaskBase):
     """
@@ -61,4 +68,4 @@ class Task(TaskBase):
         """
         Настройки для Pydantic, чтобы использовать ORM модели (SQLAlchemy).
         """
-        from_attributes = True 
+        from_attributes = True

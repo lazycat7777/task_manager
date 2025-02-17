@@ -3,20 +3,28 @@ from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-# Берем URL базы данных из окружения, для тестов он будет задан в docker-compose
-SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "postgresql+asyncpg://user:password@localhost/test_task_manager")
+environment = os.getenv("PRODUCTION", "False")
+testing = os.getenv("TESTING", "False")
 
-# Создаем движок для асинхронного соединения с базой данных
-engine = create_async_engine(SQLALCHEMY_DATABASE_URL, echo=True, future=True)
+PRODUCTION_DATABASE_URL = os.getenv("PRODUCTION_DATABASE_URL")
+TESTING_DATABASE_URL = os.getenv("TESTING_DATABASE_URL")
 
-# Настройка сессии для асинхронного взаимодействия
+if environment == "True":
+    DATABASE_URL = PRODUCTION_DATABASE_URL
+elif testing == "True":
+    DATABASE_URL = TESTING_DATABASE_URL
+else:
+    DATABASE_URL = PRODUCTION_DATABASE_URL    
+
+engine = create_async_engine(DATABASE_URL, echo=True, future=True)
+
 AsyncSessionLocal = sessionmaker(
     engine, autocommit=False, autoflush=False, class_=AsyncSession
 )
 
 Base = declarative_base()
 
-# Функция для получения сессии для работы с базой данных
+
 async def get_db():
     async with AsyncSessionLocal() as session:
         yield session

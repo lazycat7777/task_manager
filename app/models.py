@@ -2,6 +2,7 @@ from sqlalchemy import Column, Integer, String, Text, Date, ForeignKey
 from sqlalchemy.orm import relationship
 from .database import Base
 
+
 class User(Base):
     """
     Модель данных для пользователя в базе данных.
@@ -13,7 +14,9 @@ class User(Base):
     username = Column(String, unique=True, index=True)
     email = Column(String, unique=True, index=True)
 
-    tasks = relationship("Task", back_populates="user", cascade="all, delete-orphan")
+    tasks = relationship("Task", back_populates="user",
+                         cascade="all, delete-orphan")
+
 
 class Task(Base):
     """
