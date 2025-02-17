@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from datetime import date
+from typing import Optional
 
 class UserBase(BaseModel):
     """
@@ -11,7 +12,6 @@ class UserBase(BaseModel):
 class UserCreate(UserBase):
     """
     Схема для создания нового пользователя.
-    Наследует UserBase и добавляет дополнительные проверки для создания.
     """
     pass
 
@@ -25,7 +25,7 @@ class User(UserBase):
         """
         Настройки для Pydantic, чтобы использовать ORM модели (SQLAlchemy).
         """
-        orm_mode = True
+        from_attributes = True  
 
 class TaskBase(BaseModel):
     """
@@ -39,9 +39,17 @@ class TaskBase(BaseModel):
 class TaskCreate(TaskBase):
     """
     Схема для создания новой задачи.
-    Наследует TaskBase и добавляет дополнительные проверки для создания задачи.
     """
     pass
+
+class TaskUpdate(BaseModel):
+    """
+    Схема для обновления задачи.
+    Позволяет обновлять только переданные поля.
+    """
+    title: Optional[str] = None
+    description: Optional[str] = None
+    due_date: Optional[date] = None
 
 class Task(TaskBase):
     """
@@ -53,4 +61,4 @@ class Task(TaskBase):
         """
         Настройки для Pydantic, чтобы использовать ORM модели (SQLAlchemy).
         """
-        orm_mode = True
+        from_attributes = True 

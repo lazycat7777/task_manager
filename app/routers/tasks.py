@@ -5,13 +5,13 @@ from app import schemas, crud
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
 
-@router.post("/", response_model=schemas.Task)
+@router.post("/", response_model=schemas.Task, status_code=201)
 async def create_task(task: schemas.TaskCreate, db: AsyncSession = Depends(get_db)):
     """
     Создание новой задачи для пользователя.
     """
     created_task = await crud.create_task(db=db, task=task)
-    return created_task, 201
+    return created_task
 
 @router.get("/user/{user_id}", response_model=list[schemas.Task])
 async def read_tasks(user_id: int, db: AsyncSession = Depends(get_db)):
@@ -22,7 +22,7 @@ async def read_tasks(user_id: int, db: AsyncSession = Depends(get_db)):
     return tasks
 
 @router.put("/{task_id}", response_model=schemas.Task)
-async def update_task(task_id: int, task: schemas.TaskCreate, db: AsyncSession = Depends(get_db)):
+async def update_task(task_id: int, task: schemas.TaskUpdate, db: AsyncSession = Depends(get_db)):
     """
     Обновление задачи по её ID.
     Если задача не найдена, генерируется ошибка.
