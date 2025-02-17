@@ -5,6 +5,7 @@ from app import schemas, crud
 
 router = APIRouter(prefix="/users", tags=["users"])
 
+
 @router.post("/", response_model=schemas.User, status_code=201)
 async def create_user(user: schemas.UserCreate, db: AsyncSession = Depends(get_db)):
     """
@@ -14,13 +15,15 @@ async def create_user(user: schemas.UserCreate, db: AsyncSession = Depends(get_d
     db_user_by_email = await crud.get_user_by_email(db, email=user.email)
     if db_user_by_email:
         raise HTTPException(status_code=400, detail="Email already registered")
-    
+
     db_user_by_username = await crud.get_user_by_username(db, username=user.username)
     if db_user_by_username:
-        raise HTTPException(status_code=400, detail="Username already registered")
-    
+        raise HTTPException(
+            status_code=400, detail="Username already registered")
+
     created_user = await crud.create_user(db=db, user=user)
     return created_user
+
 
 @router.get("/{user_id}", response_model=schemas.User)
 async def read_user(user_id: int, db: AsyncSession = Depends(get_db)):

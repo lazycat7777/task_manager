@@ -4,14 +4,15 @@ services:
   web:
     build: .
     ports:
-      - "8000:80"
+      - "8000:8000"
     volumes:
       - .:/app
     depends_on:
       db:
         condition: service_healthy
     environment:
-      - DATABASE_URL=postgresql+asyncpg://user:password@db/task_manager
+      - PRODUCTION_DATABASE_URL=postgresql+asyncpg://user:password@db/task_manager
+      - PRODUCTION=True
 
   db:
     image: postgres:13

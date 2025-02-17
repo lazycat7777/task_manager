@@ -5,6 +5,7 @@ from app import schemas, crud
 
 router = APIRouter(prefix="/tasks", tags=["tasks"])
 
+
 @router.post("/", response_model=schemas.Task, status_code=201)
 async def create_task(task: schemas.TaskCreate, db: AsyncSession = Depends(get_db)):
     """
@@ -13,6 +14,7 @@ async def create_task(task: schemas.TaskCreate, db: AsyncSession = Depends(get_d
     created_task = await crud.create_task(db=db, task=task)
     return created_task
 
+
 @router.get("/user/{user_id}", response_model=list[schemas.Task])
 async def read_tasks(user_id: int, db: AsyncSession = Depends(get_db)):
     """
@@ -20,6 +22,7 @@ async def read_tasks(user_id: int, db: AsyncSession = Depends(get_db)):
     """
     tasks = await crud.get_tasks(db, user_id=user_id)
     return tasks
+
 
 @router.put("/{task_id}", response_model=schemas.Task)
 async def update_task(task_id: int, task: schemas.TaskUpdate, db: AsyncSession = Depends(get_db)):
@@ -31,6 +34,7 @@ async def update_task(task_id: int, task: schemas.TaskUpdate, db: AsyncSession =
     if not db_task:
         raise HTTPException(status_code=404, detail="Task not found")
     return db_task
+
 
 @router.delete("/{task_id}", response_model=schemas.Task)
 async def delete_task(task_id: int, db: AsyncSession = Depends(get_db)):
