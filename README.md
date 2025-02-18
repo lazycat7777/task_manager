@@ -38,8 +38,8 @@ Task Manager — это веб-приложение для управления 
 
 1. Клонируйте репозиторий:
 ```bash
-git clone <repository-url>
-cd <repository-folder>
+git clone https://github.com/lazycat7777/task_manager.git
+cd task_manager
 ```
 
 2. Запуск приложения осуществляется с помощью команды:

@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 from datetime import date
 from typing import Optional
 
@@ -8,7 +8,7 @@ class UserBase(BaseModel):
     Базовая схема для пользователя, включающая имя пользователя и email.
     """
     username: str
-    email: str
+    email: EmailStr
 
 
 class UserCreate(UserBase):
